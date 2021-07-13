@@ -1,39 +1,26 @@
-import { Component } from "react";
+import { useEffect } from "react";
+import { useState } from "react";
 import { ListGroup, Button } from "react-bootstrap";
 import Loading from "./Loading";
 
-class CommentsArea extends Component {
-  state = {
-    asin: this.props.asin,
-    comments: [],
-    isLoading: true,
-  };
+const CommentsArea = (props) => {
 
-  componentDidMount = async () => {
-    let response = await fetch(
-      "https://striveschool-api.herokuapp.com/api/comments/" +
-        this.props.asin,
-      {
-        headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGRjNjk1ZGIzNTgxNzAwMTVjMjI3MjYiLCJpYXQiOjE2MjUwNTc2MzAsImV4cCI6MTYyNjI2NzIzMH0.PCebFyd28A7h5LkwblkqMU8Gf3BXrcfKepkegk76eaw",
-        },
-      }
-    );
-    let commentBooks = await response.json();
-    this.setState({
-      asin: this.props.asin,
-      comments: commentBooks,
-      isLoading: false
-    });
-  };
+  console.log(props.asin, "props")
 
-  componentDidUpdate = async (prevProps, PrevState) => {
-    if(this.props.asin !== PrevState.asin){
-      console.log("inside", this.props.asin)
+  // const [asin, setAsin] = useState(null)
+  const [comments, setComments] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  // useEffect(() => {
+  //    fetchComments()
+
+  // }, [])
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      // console.log(asin, "inside the fetch")
       let response = await fetch(
-        "https://striveschool-api.herokuapp.com/api/comments/" +
-          this.props.asin,
+        "https://striveschool-api.herokuapp.com/api/comments/" + props.asin,
         {
           headers: {
             Authorization:
@@ -41,16 +28,19 @@ class CommentsArea extends Component {
           },
         }
       );
+      console.log(response)
       let commentBooks = await response.json();
-      this.setState({
-        asin: this.props.asin,
-        comments: commentBooks,
-        isLoading: false
-      });
-    }
-  };
+      console.log(commentBooks)
+      // setAsin(props.asin)
+      setComments(commentBooks)
+      setIsLoading(false)
+    };
+    fetchComments()
 
-  deleteComment = async (e) => {
+  }, [props.asin])
+
+
+  const deleteComment = async (e) => {
     try {
       let response = await fetch(
         "https://striveschool-api.herokuapp.com/api/comments/" + e,
@@ -64,7 +54,7 @@ class CommentsArea extends Component {
       );
       if (response.ok) {
         alert("Comment Deleted");
-        this.componentDidMount()
+        // fetchComments()
 
       } else alert("We had a problem to delete it");
     } catch (error) {
@@ -72,12 +62,12 @@ class CommentsArea extends Component {
     }
   };
 
-  render() {
+
     return (
       <>
-       {this.state.isLoading && <Loading />}
+       {isLoading && <Loading />}
         <ListGroup>
-          {this.state.comments
+          {comments
             .map((comment) => (
               <div key={comment._id} className="d-flex justify-content-between">
                 <ListGroup.Item className="m-2">
@@ -86,7 +76,7 @@ class CommentsArea extends Component {
                 <Button
                   variant="danger"
                   className="m-2"
-                  onClick={() => this.deleteComment(comment._id)}
+                  onClick={() => deleteComment(comment._id)}
                 >
                   Delete
                 </Button>
@@ -96,7 +86,6 @@ class CommentsArea extends Component {
         </ListGroup>
       </>
     );
-  }
 }
 
 export default CommentsArea;

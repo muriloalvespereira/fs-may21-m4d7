@@ -1,10 +1,9 @@
-import { Component } from "react";
 import DisplayCommentsCard from "./DisplayCommentsCard";
 
-class DisplayComments extends Component {
-  render() {
-    return <DisplayCommentsCard asin={this.props.asin} />;
-  }
+const DisplayComments = (props) => {
+
+    return <DisplayCommentsCard asin={props.asin} />;
+
 }
 
 export default DisplayComments;

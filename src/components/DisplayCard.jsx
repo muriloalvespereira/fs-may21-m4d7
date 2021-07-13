@@ -8,7 +8,9 @@ class DisplayCard extends Component {
   };
 
   commentsSection = (e) => {
+    if(this.state.showComments === false){
     this.props.commentsSection(e);
+    }
     if (this.state.showComments === false) {
       this.setState({
         showComments: true,

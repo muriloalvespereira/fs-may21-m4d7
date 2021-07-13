@@ -5,22 +5,17 @@ import BuildJumbotron from './components/BuildJumbotron';
 import BuildCards from './components/BuildCards';
 import { Col, Container, Row } from "react-bootstrap"
 import DisplayComments from './components/DisplayComments';
-import { Component } from 'react';
+import { useState } from 'react';
 
-class App extends Component{
+const App = () =>{
 
-  state = {
-    asin: null
-  }
+  const [asin, setAsin] = useState(null)
 
-  commentsSection = (e) => {
+  const commentsSection = (e) => {
     console.log(e)
-    this.setState({
-      asin: e,
-    })
+    setAsin(e)
   }
 
-  render(){
   return (
     <div className="App">
       <BuildNavbar />
@@ -28,12 +23,12 @@ class App extends Component{
         <BuildJumbotron />
         <Row>
           <Col className="col-9">
-            <BuildCards initial={0} end={4} commentsSection={this.commentsSection}/>
-            <BuildCards initial={4} end={8} commentsSection={this.commentsSection}/>
+            <BuildCards initial={0} end={4} commentsSection={commentsSection}/>
+            <BuildCards initial={4} end={8} commentsSection={commentsSection}/>
           </Col>
           <Col className="col-3">
-          { this.state.asin !== null &&
-            <DisplayComments initial={0} end={1} asin={this.state.asin}/>
+          { asin !== null &&
+            <DisplayComments initial={0} end={1} asin={asin}/>
           }
           </Col>
         </Row>
@@ -41,7 +36,6 @@ class App extends Component{
       <BuildFooter />
     </div>
   );
-  }
 }
 
 export default App;
