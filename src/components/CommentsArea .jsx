@@ -17,24 +17,6 @@ const CommentsArea = (props) => {
   // }, [])
 
   useEffect(() => {
-    const fetchComments = async () => {
-      // console.log(asin, "inside the fetch")
-      let response = await fetch(
-        "https://striveschool-api.herokuapp.com/api/comments/" + props.asin,
-        {
-          headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGRjNjk1ZGIzNTgxNzAwMTVjMjI3MjYiLCJpYXQiOjE2MjUwNTc2MzAsImV4cCI6MTYyNjI2NzIzMH0.PCebFyd28A7h5LkwblkqMU8Gf3BXrcfKepkegk76eaw",
-          },
-        }
-      );
-      console.log(response)
-      let commentBooks = await response.json();
-      console.log(commentBooks)
-      // setAsin(props.asin)
-      setComments(commentBooks)
-      setIsLoading(false)
-    };
     fetchComments()
 
   }, [props.asin])
@@ -60,6 +42,24 @@ const CommentsArea = (props) => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const fetchComments = async () => {
+    let response = await fetch(
+      "https://striveschool-api.herokuapp.com/api/comments/" + props.asin,
+      {
+        headers: {
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGRjNjk1ZGIzNTgxNzAwMTVjMjI3MjYiLCJpYXQiOjE2MjUwNTc2MzAsImV4cCI6MTYyNjI2NzIzMH0.PCebFyd28A7h5LkwblkqMU8Gf3BXrcfKepkegk76eaw",
+        },
+      }
+    );
+    console.log(response)
+    let commentBooks = await response.json();
+    console.log(commentBooks)
+    // setAsin(props.asin)
+    setComments(commentBooks)
+    setIsLoading(false)
   };
 
 
